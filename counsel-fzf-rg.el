@@ -3,6 +3,7 @@
 ;; This is free and unencumbered software released into the public domain.
 
 ;; Author: Illia A. Danko <i@idanko.net>
+;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/idanko/counsel-fzf-rg.el
 
 ;;; Commentary:
@@ -23,6 +24,25 @@
   :display-transformer-fn #'counsel-git-grep-transformer
   :grep-p t
   :exit-codes '(1 "No matches found"))
+
+(defun counsel-fzf-rg-action (x)
+  "Go to candidate X."
+  (when (string-match "\\`\\(.*?\\):\\([0-9]+\\):\\(.*\\)\\'" x)
+    (let ((file-name (match-string-no-properties 1 x))
+          (line-number (match-string-no-properties 2 x)))
+      (find-file (expand-file-name
+                  file-name
+                  counsel--fzf-dir))
+      (goto-char (point-min))
+      (forward-line (1- (string-to-number line-number)))
+      (when (re-search-forward (ivy--regex ivy-text t) (line-end-position) t)
+        (when swiper-goto-start-of-match
+          (goto-char (match-beginning 0))))
+      (swiper--ensure-visible)
+      (run-hooks 'counsel-grep-post-action-hook)
+      (unless (eq ivy-exit 'done)
+        (swiper--cleanup)
+        (swiper--add-overlays (ivy--regex ivy-text))))))
 
 ;;;###autoload
 (defun counsel-fzf-rg (&optional initial-input initial-directory fzf-prompt)
@@ -51,7 +71,7 @@ FZF-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
                     :initial-input initial-input
                     :re-builder #'ivy--regex-fuzzy
                     :dynamic-collection t
-                    :action #'counsel-git-grep-action
+                    :action #'counsel-fzf-rg-action
                     :caller 'counsel-fzf-rg))
       (setenv fzf-command-env previous-fzf-rg-cmd))))
 
