@@ -1,0 +1,7 @@
+ripgrep fzf search counsel.el extension
+
+* counsel-fzf-rg.el
+
+Extends the ripgrep search capabilities by wrapping results with fzf. One of the
+use cases would be to do fuzzy search filename along with its content.
+
