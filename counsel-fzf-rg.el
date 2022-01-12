@@ -62,10 +62,15 @@ FZF-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
         (or initial-directory
             (funcall counsel-fzf-dir-function)))
   (let* ((fzf-command-env "FZF_DEFAULT_COMMAND")
-         (previous-fzf-rg-cmd (getenv fzf-command-env)))
+         (previous-fzf-rg-cmd (getenv fzf-command-env))
+         (empty-input? (string-equal initial-input ""))
+         ;; Use \S to filter out empty lines.
+         (fzf-command (format counsel-fzf-rg-cmd (if empty-input?
+                                                     "\\S"
+                                                   initial-input))))
     (unwind-protect
         (progn
-          (setenv fzf-command-env (format counsel-fzf-rg-cmd initial-input))
+          (setenv fzf-command-env fzf-command)
           (ivy-read (or fzf-prompt "fuzzy rg: ")
                     #'counsel-fzf-function
                     :initial-input initial-input
