@@ -8,15 +8,17 @@
 
 ;;; Commentary:
 
-;; counsel-fzf-rg.el extends the ripgrep search capabilities by wrapping results with fzf.
-;; One of the use cases would be to do fuzzy search filename along with its content.
+;; counsel-fzf-rg.el extends ripgrep search capabilities by wrapping results in
+;; fzf. One of use cases is to make the fuzzy finding filename, plus line
+;; number, plus line's content.
+
 
 ;;; Code:
 
 (require 'counsel)
 
 (defvar counsel-fzf-rg-cmd "rg --no-column --line-number --no-heading --color=never --smart-case -- \"%s\""
-  "rg command and arguments. Used along with fzf.")
+  "rg command. Will be wrapped in fzf.")
 
 (ivy-configure 'counsel-fzf-rg
   :occur #'counsel-ag-occur
@@ -46,7 +48,7 @@
 
 ;;;###autoload
 (defun counsel-fzf-rg (&optional initial-input initial-directory fzf-prompt)
-  "Grep for a string in the current directory using `fzf' wrap over `rg'.
+  "Search for a string in `initial-directory' directory using `rg' wrapped in `fzf'.
 INITIAL-INPUT can be given as the initial minibuffer input.
 INITIAL-DIRECTORY, if non-nil, is used as the root directory for search.
 FZF-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
