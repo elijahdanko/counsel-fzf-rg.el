@@ -2,9 +2,9 @@
 
 ;; This is free and unencumbered software released into the public domain.
 
-;; Author: Illia A. Danko <i@idanko.net>
+;; Author: Elijah Danko <me@elijahdanko.net>
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
-;; URL: https://github.com/idanko/counsel-fzf-rg.el
+;; URL: https://github.com/elijahdanko/counsel-fzf-rg.el
 
 ;;; Commentary:
 
